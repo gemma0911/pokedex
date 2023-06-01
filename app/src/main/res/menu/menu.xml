@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Pokemon"
+        android:id="@+id/pokemon"
+        android:icon="@drawable/baseline_catching_pokemon_24"
+        />
+    <item android:title="Map"
+        android:id="@+id/map"
+        android:icon="@drawable/baseline_map_24"
+        />
+    <item android:title="Favoritos"
+        android:id="@+id/favoritos"
+        android:icon="@drawable/baseline_favorite_border_24"
+        />
+    <item android:title="User"
+        android:id="@+id/user"
+        android:icon="@drawable/baseline_supervised_user_circle_24"
+        />
+</menu>
