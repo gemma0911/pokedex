@@ -9,10 +9,10 @@ import com.example.view_photos_pokemon.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PokemonViewModel(private val pokemonRepository: PokemonRepository) : ViewModel() {
+class PokemonViewModel(private val pokemonRepository: PokemonRepository,var i : Int) : ViewModel() {
     init {
         viewModelScope.launch (Dispatchers.IO) {
-            pokemonRepository.getResults()
+            pokemonRepository.getResults(i)
         }
     }
     val pokemon : LiveData<Pokemon>

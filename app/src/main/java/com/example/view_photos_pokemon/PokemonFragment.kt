@@ -11,6 +11,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemon.Model.Pokemon
 import com.example.view_photos_pokemon.api.ApiInterface
@@ -42,6 +43,8 @@ class PokemonFragment : Fragment() {
     private lateinit var pokemonViewModel: PokemonViewModel
     private lateinit var pokemonAdapter: PokemonAdapter
     private lateinit var recycleView : RecyclerView
+    private lateinit var listData : ArrayList<PokemonDetail>
+    private var PAGE : Int = 0
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -87,36 +90,72 @@ class PokemonFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         data = ArrayList()
         recycleView = view.findViewById(R.id.recycleView)
-        loadData()
-
-        val search : androidx.appcompat.widget.SearchView = view.findViewById(R.id.searchView)
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if(newText!=""){
-                } else {
-                    loadData()
-                }
-                return true
-            }
-        })
-
-    }
-
-    @SuppressLint("FragmentLiveDataObserve")
-    private fun loadData() {
         val apiInterface = ApiUtilities.getInstance().create(ApiInterface::class.java)
         val pokemonRepository = PokemonRepository(apiInterface)
-        pokemonViewModel = ViewModelProvider(this, PokemonViewModelFactory(pokemonRepository))[PokemonViewModel::class.java]
+        pokemonViewModel = ViewModelProvider(this, PokemonViewModelFactory(pokemonRepository,PAGE))[PokemonViewModel::class.java]
         pokemonViewModel.pokemon.observe(this@PokemonFragment) {
             data = it.results as ArrayList<Results>
             getSum(a = data!!)
         }
-    }
 
+//        listData
+//        pokemonAdapter = PokemonAdapter(array!!,context!!)
+
+        recycleView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                var firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (firstVisibleItemPosition >= 0 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                    PAGE += 20
+                    val apiInterface = ApiUtilities.getInstance().create(ApiInterface::class.java)
+                    val pokemonRepository = PokemonRepository(apiInterface)
+                    pokemonViewModel = ViewModelProvider(this@PokemonFragment, PokemonViewModelFactory(pokemonRepository,20))[PokemonViewModel::class.java]
+                    pokemonViewModel.pokemon.observe(this@PokemonFragment) {
+                        var a = it.results as ArrayList<Results>
+                        getSum(a = data!!)
+                        var array : ArrayList<PokemonDetail> = ArrayList()
+                        for(i in 0 until a.size) {
+                            val retrofit = Retrofit.Builder()
+                                .baseUrl("https://pokeapi.co/api/v2/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build()
+                            val retrofitAPI = retrofit.create(ApiInterface::class.java)
+                            val call: Call<PokemonDetail> = retrofitAPI.getPokemon(a[i].name)
+                            call!!.enqueue(object : Callback<PokemonDetail?> {
+                                override fun onResponse(
+                                    call: Call<PokemonDetail?>?,
+                                    response: Response<PokemonDetail?>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        var list : PokemonDetail = response.body()!!
+                                        list?.let {
+                                            var sum : PokemonDetail = list
+                                            array?.add(sum)
+                                            if(i == a.size-1) {
+                                                Log.d("QQ", "$array")
+                                                pokemonAdapter.updateUserList(array)
+                                            }
+                                        }
+                                    }
+                                }
+                                override fun onFailure(call: Call<PokemonDetail?>?, t: Throwable?) {
+                                    Toast.makeText(context, "Fail to get the data..", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+
+                            })
+                        }
+                    }
+                }
+            }
+
+        })
+    }
     @SuppressLint("FragmentLiveDataObserve", "UseRequireInsteadOfGet")
     private fun getSum(a : ArrayList<Results>) {
         var array : ArrayList<PokemonDetail> = ArrayList()
@@ -136,7 +175,6 @@ class PokemonFragment : Fragment() {
                         var list : PokemonDetail = response.body()!!
                         list?.let {
                             var sum : PokemonDetail = list
-                            Log.d("POKEMON","$sum")
                             array?.add(sum)
                             if(i == a.size-1) {
                                 pokemonAdapter = PokemonAdapter(array!!,context!!)

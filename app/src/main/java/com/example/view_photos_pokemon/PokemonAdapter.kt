@@ -13,7 +13,7 @@ import com.example.view_photos_pokemon.model.PokemonDetail
 import com.squareup.picasso.Picasso
 
 
-class PokemonAdapter(private var friendList: ArrayList<PokemonDetail>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PokemonAdapter(private var pokemonList: ArrayList<PokemonDetail>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             1 -> {
@@ -59,9 +59,9 @@ class PokemonAdapter(private var friendList: ArrayList<PokemonDetail>, val conte
         }
     }
 
-    fun setFilteredList(list : ArrayList<PokemonDetail>){
-        this.friendList = list
-        notifyDataSetChanged()
+    fun setFilteredList(): ArrayList<PokemonDetail> {
+        this.pokemonList = pokemonList
+        return pokemonList
     }
 
     class Grass(itemView : View) : RecyclerView.ViewHolder(itemView) {
@@ -157,7 +157,7 @@ class PokemonAdapter(private var friendList: ArrayList<PokemonDetail>, val conte
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        var item = friendList[position]
+        var item = pokemonList[position]
         if(holder.javaClass == Grass::class.java) {
             var viewHolder = holder as Grass
             holder.textView.text = item.name
@@ -238,10 +238,10 @@ class PokemonAdapter(private var friendList: ArrayList<PokemonDetail>, val conte
         }
     }
     override fun getItemCount(): Int {
-        return friendList.size
+        return pokemonList.size
     }
     override fun getItemViewType(position: Int): Int {
-        var current = friendList[position]
+        var current = pokemonList[position]
         return when (current.types[0].type.name) {
             "grass" -> {
                 1
@@ -277,8 +277,7 @@ class PokemonAdapter(private var friendList: ArrayList<PokemonDetail>, val conte
         }
     }
     fun updateUserList(userList: ArrayList<PokemonDetail>){
-        this.friendList.clear()
-        this.friendList.addAll(userList)
+        this.pokemonList.addAll(userList)
         notifyDataSetChanged()
     }
 }
