@@ -10,9 +10,9 @@ import retrofit2.http.Path
 
 interface ApiInterface {
     @GET("pokemon")
-    suspend fun getData() : Response<Results>
+    suspend fun getData() : Response<Pokemon>
 
-//    @GET("pokemon/{name}")
-//    fun getPokemon(@Path("name") name: String) : Call<PokemonDetail>
+    @GET("pokemon/{name}")
+    fun getPokemon(@Path("name") name: String) : Call<PokemonDetail>
 
 }

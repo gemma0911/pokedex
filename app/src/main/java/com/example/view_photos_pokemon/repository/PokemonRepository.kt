@@ -12,8 +12,8 @@ class PokemonRepository(private val apiInterface: ApiInterface )  {
     val results : LiveData<Pokemon>
         get() = pokemonLiveData
     suspend fun getResults() {
-        val api = apiInterface.getData()
-        if(api.body() != null) {
+        var api = apiInterface.getData()
+        if(api.body()!=null) {
             pokemonLiveData.postValue(api.body())
         }
     }
