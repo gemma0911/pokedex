@@ -25,7 +25,7 @@
             android:adjustViewBounds="true"
             android:alpha="0.10"
             android:background="@drawable/pokeball"
-            app:tint="@color/white" />
+            android:tint="@color/white" />
 
         <View
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="What Pokemon are you looking for?"
+                    android:text="@string/main_title"
                     android:textColor="@color/white"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -85,13 +85,22 @@
                         android:layout_marginEnd="16dp"
                         android:gravity="center"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/grass1"
-                        android:backgroundTint="@color/white"
+                        android:background="@drawable/background_search_bar"
                         android:orientation="horizontal">
 
-                        <androidx.appcompat.widget.SearchView
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginStart="16dp"
+                            android:src="@drawable/search" />
+
+                        <TextView
+                            android:id="@+id/search_text"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:textSize="16sp"
+                            android:text="@string/main_search" />
 
                     </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
@@ -119,6 +128,7 @@
                 android:id="@+id/recyclerViewMenu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/rounded_bottom_border"
                 android:overScrollMode="never"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -129,38 +139,40 @@
                 tools:listitem="@layout/item_menu"
                 tools:spanCount="2" />
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:padding="16dp">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@color/backgroundLight"-->
+            <!--                android:padding="16dp">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text="sfsdf"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="22sp"-->
-<!--                    android:textStyle="bold" />-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:text="@string/pokemon_news"-->
+            <!--                    android:textColor="@color/black"-->
+            <!--                    android:textSize="22sp"-->
+            <!--                    android:textStyle="bold" />-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="sdfsdfs"-->
-<!--                    android:textColor="@color/indigo"-->
-<!--                    android:textSize="18sp" />-->
-<!--            </LinearLayout>-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="@string/view_all"-->
+            <!--                    android:textColor="@color/indigo"-->
+            <!--                    android:textSize="18sp" />-->
+            <!--            </LinearLayout>-->
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recyclerViewNews"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:overScrollMode="never"-->
-<!--                app:layoutManager="GridLayoutManager"-->
-<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-<!--                tools:itemCount="6"-->
-<!--                tools:listitem="@layout/item_news"-->
-<!--                tools:spanCount="1" />-->
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/recyclerViewNews"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:background="@color/backgroundLight"-->
+            <!--                android:overScrollMode="never"-->
+            <!--                app:layoutManager="GridLayoutManager"-->
+            <!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+            <!--                tools:itemCount="6"-->
+            <!--                tools:listitem="@layout/item_news"-->
+            <!--                tools:spanCount="1" />-->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
